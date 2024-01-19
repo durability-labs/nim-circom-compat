@@ -29,4 +29,13 @@ suite "Test circom compat nim":
 
     check ctx.verify_circuit(proofBytes, publicBytes) == ERR_OK
 
+    ctx.addr.release_circom_compat()
+    check ctx == nil
+
+    proofBytes.addr.release_buffer()
+    check proofBytes == nil
+
+    publicBytes.addr.release_buffer()
+    check publicBytes == nil
+
     check res == ERR_OK
