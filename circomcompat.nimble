@@ -9,6 +9,6 @@ srcDir        = "src"
 
 # Dependencies
 
-requires "nim >= 1.6.18"
+requires "nim >= 1.2.18"
 
 include "build.nims"
