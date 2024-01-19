@@ -17,6 +17,6 @@ static:
   if exitCode != 0:
     raiseAssert("Failed to build circom-compat-ffi")
 
-{.passl: "-lcircom_compat_ffi" & " -L" & libDir.}
+{.passl: "-lcircom_compat_ffi -lm" & " -L" & libDir.}
 
 include circomcompatffi

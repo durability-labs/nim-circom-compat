@@ -8,13 +8,22 @@ jobs:
     strategy:
       matrix:
         nim: [stable, 1.6.16, 1.4.8, 1.2.18]
+        toolchain:
+          - stable
+          # - beta
+          # - nightly
+
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: 'true'
-    - uses: iffy/install-nim@v3
+
+    - name: Install Nim
+      uses: asdf-vm/actions/install@v3
       with:
-        version: ${{ matrix.nim }}
+        tool_versions: |
+          nim ${{ matrix.nim }}
+
     - name: Build
       run: nimble install -y
     - name: Test
