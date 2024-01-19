@@ -36,6 +36,8 @@ proc init_circom_compat*(r1cs_path: pointer,
 
 proc release_circom_compat*(ctx_ptr: ptr ptr CircomCompatCtx): void {.importc: "release_circom_compat".}
 
+proc release_buffer*(buff_ptr: ptr ptr Buffer): void {.importc: "release_buffer".}
+
 ## # Safety
 #
 proc push_input_u256_array*(ctx_ptr: ptr CircomCompatCtx,
