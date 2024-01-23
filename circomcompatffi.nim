@@ -28,6 +28,8 @@ const ERR_MAKING_PROOF* = 12
 
 const ERR_SERIALIZE_PROOF* = 13
 
+const ERR_SERIALIZE_INPUTS* = 14
+
 
 type CircomCompatCtx* {.incompleteStruct.} = object
 
@@ -49,12 +51,14 @@ proc release_buffer*(buff_ptr: ptr ptr Buffer): void {.importc: "release_buffer"
 ## # Safety
 #
 proc prove_circuit*(ctx_ptr: ptr CircomCompatCtx,
+                    compress: bool,
                     proof_bytes_ptr: ptr ptr Buffer,
                     inputs_bytes_ptr: ptr ptr Buffer): int32 {.importc: "prove_circuit".}
 
 ## # Safety
 #
 proc verify_circuit*(ctx_ptr: ptr CircomCompatCtx,
+                     compress: bool,
                      proof_bytes_ptr: ptr Buffer,
                      inputs_bytes_ptr: ptr Buffer): int32 {.importc: "verify_circuit".}
 
@@ -65,30 +69,30 @@ proc push_input_u256_array*(ctx_ptr: ptr CircomCompatCtx,
                             input_ptr: pointer,
                             len: uint): int32 {.importc: "push_input_u256_array".}
 
-proc push_input_numeric_i8*(ctx_ptr: ptr CircomCompatCtx,
-                            name_ptr: pointer,
-                            input: int8): int32 {.importc: "push_input_numeric_i8".}
+proc push_input_i8*(ctx_ptr: ptr CircomCompatCtx,
+                    name_ptr: pointer,
+                    input: int8): int32 {.importc: "push_input_i8".}
 
-proc push_input_numeric_u8*(ctx_ptr: ptr CircomCompatCtx,
-                            name_ptr: pointer,
-                            input: uint8): int32 {.importc: "push_input_numeric_u8".}
+proc push_input_u8*(ctx_ptr: ptr CircomCompatCtx,
+                    name_ptr: pointer,
+                    input: uint8): int32 {.importc: "push_input_u8".}
 
-proc push_input_numeric_i16*(ctx_ptr: ptr CircomCompatCtx,
-                             name_ptr: pointer,
-                             input: int16): int32 {.importc: "push_input_numeric_i16".}
+proc push_input_i16*(ctx_ptr: ptr CircomCompatCtx,
+                     name_ptr: pointer,
+                     input: int16): int32 {.importc: "push_input_i16".}
 
-proc push_input_numeric_u16*(ctx_ptr: ptr CircomCompatCtx,
-                             name_ptr: pointer,
-                             input: uint16): int32 {.importc: "push_input_numeric_u16".}
+proc push_input_u16*(ctx_ptr: ptr CircomCompatCtx,
+                     name_ptr: pointer,
+                     input: uint16): int32 {.importc: "push_input_u16".}
 
-proc push_input_numeric_i32*(ctx_ptr: ptr CircomCompatCtx,
-                             name_ptr: pointer,
-                             input: int32): int32 {.importc: "push_input_numeric_i32".}
+proc push_input_i32*(ctx_ptr: ptr CircomCompatCtx,
+                     name_ptr: pointer,
+                     input: int32): int32 {.importc: "push_input_i32".}
 
-proc push_input_numeric_u32*(ctx_ptr: ptr CircomCompatCtx,
-                             name_ptr: pointer,
-                             input: uint32): int32 {.importc: "push_input_numeric_u32".}
+proc push_input_u32*(ctx_ptr: ptr CircomCompatCtx,
+                     name_ptr: pointer,
+                     input: uint32): int32 {.importc: "push_input_u32".}
 
-proc push_input_numeric_u64*(ctx_ptr: ptr CircomCompatCtx,
-                             name_ptr: pointer,
-                             input: uint64): int32 {.importc: "push_input_numeric_u64".}
+proc push_input_u64*(ctx_ptr: ptr CircomCompatCtx,
+                     name_ptr: pointer,
+                     input: uint64): int32 {.importc: "push_input_u64".}
