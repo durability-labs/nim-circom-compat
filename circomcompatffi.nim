@@ -37,6 +37,23 @@ type Buffer* = object
   data*: pointer
   len*: uint
 
+type G1* = object
+  x*: array[byte, 32]
+  y*: array[byte, 32]
+
+type G2* = object
+  x*: array[array[byte, 32], 2]
+  y*: array[array[byte, 32], 2]
+
+type Proof* = object
+  a*: G1
+  b*: G2
+  c*: G1
+
+type Inputs* = object
+  elms*: ptr array[byte, 32]
+  len*: uint
+
 ## # Safety
 #
 proc init_circom_compat*(r1cs_path: pointer,
@@ -51,16 +68,15 @@ proc release_buffer*(buff_ptr: ptr ptr Buffer): void {.importc: "release_buffer"
 ## # Safety
 #
 proc prove_circuit*(ctx_ptr: ptr CircomCompatCtx,
-                    compress: bool,
-                    proof_bytes_ptr: ptr ptr Buffer,
-                    inputs_bytes_ptr: ptr ptr Buffer): int32 {.importc: "prove_circuit".}
+                    proof_ptr: ptr ptr Proof,
+                    inputs_ptr: ptr ptr Inputs): int32 {.importc: "prove_circuit".}
 
 ## # Safety
 #
 proc verify_circuit*(ctx_ptr: ptr CircomCompatCtx,
                      compress: bool,
-                     proof_bytes_ptr: ptr Buffer,
-                     inputs_bytes_ptr: ptr Buffer): int32 {.importc: "verify_circuit".}
+                     proof: ptr Proof,
+                     inputs: ptr Inputs): int32 {.importc: "verify_circuit".}
 
 ## # Safety
 #
