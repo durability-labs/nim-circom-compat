@@ -54,6 +54,14 @@ type Inputs* = object
   elms*: ptr array[32, byte]
   len*: uint
 
+type VerifyingKey* = object
+  alpha1*: G1
+  beta2*: G2
+  gamma2*: G2
+  delta2*: G2
+  ic*: ptr G1
+  icLen*: uint
+
 ## # Safety
 #
 proc init_circom_compat*(r1cs_path: pointer,
@@ -65,18 +73,32 @@ proc release_circom_compat*(ctx_ptr: ptr ptr CircomCompatCtx): void {.importc: "
 
 proc release_buffer*(buff_ptr: ptr ptr Buffer): void {.importc: "release_buffer".}
 
-## # Safety
-#
-proc prove_circuit*(ctx_ptr: ptr CircomCompatCtx,
-                    proof_ptr: ptr ptr Proof,
-                    inputs_ptr: ptr ptr Inputs): int32 {.importc: "prove_circuit".}
+proc release_proof*(proof_ptr: ptr ptr Proof): void {.importc: "release_proof".}
+
+proc release_inputs*(inputs_ptr: ptr ptr Inputs): void {.importc: "release_inputs".}
+
+proc release_key*(key_ptr: ptr ptr VerifyingKey): void {.importc: "release_key".}
 
 ## # Safety
 #
-proc verify_circuit*(ctx_ptr: ptr CircomCompatCtx,
-                     compress: bool,
-                     proof: ptr Proof,
-                     inputs: ptr Inputs): int32 {.importc: "verify_circuit".}
+proc prove_circuit*(ctx_ptr: ptr CircomCompatCtx,
+                    proof_ptr: ptr ptr Proof): int32 {.importc: "prove_circuit".}
+
+## # Safety
+#
+proc get_pub_inputs*(ctx_ptr: ptr CircomCompatCtx,
+                     inputs_ptr: ptr ptr Inputs): int32 {.importc: "get_pub_inputs".}
+
+## # Safety
+#
+proc get_verifying_key*(ctx_ptr: ptr CircomCompatCtx,
+                        vk_ptr: ptr ptr VerifyingKey): int32 {.importc: "get_verifying_key".}
+
+## # Safety
+#
+proc verify_circuit*(proof: ptr Proof,
+                     inputs: ptr Inputs,
+                     pvk: ptr VerifyingKey): int32 {.importc: "verify_circuit".}
 
 ## # Safety
 #

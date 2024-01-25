@@ -9,32 +9,33 @@ suite "Test circom compat nim":
       wasmPath = "vendor/circom-compat-ffi/fixtures/mycircuit.wasm".cstring
 
     var ctx: ptr CircomCompatCtx
-    let res = init_circom_compat(
+    check init_circom_compat(
       r1csPath,
       wasmPath,
       nil,
-      ctx.addr)
+      ctx.addr) == ERR_OK
 
-    check ctx.push_input_numeric_i8("a".cstring, 3) == ERR_OK
-    check ctx.push_input_numeric_i8("b".cstring, 11) == ERR_OK
+    check ctx.push_input_i8("a".cstring, 3) == ERR_OK
+    check ctx.push_input_i8("b".cstring, 11) == ERR_OK
 
-    var proofBytes: ptr Buffer
-    var publicBytes: ptr Buffer
+    var proofPtr: ptr Proof
+    var inputsPtr: ptr Inputs
+    var vkPtr: ptr VerifyingKey
 
-    check ctx.prove_circuit(proofBytes.addr, publicBytes.addr) == ERR_OK
+    check ctx.get_pub_inputs(inputsPtr.addr) == ERR_OK
+    check ctx.prove_circuit(proofPtr.addr) == ERR_OK
 
-    check proofBytes.len > 0
-    check publicBytes.len > 0
+    check ctx.get_verifying_key(vkPtr.addr) == ERR_OK
+    check verify_circuit(proofPtr, inputsPtr, vkPtr) == ERR_OK
 
-    check ctx.verify_circuit(proofBytes, publicBytes) == ERR_OK
+    release_proof(proofPtr.addr)
+    check proofPtr == nil
+
+    release_inputs(inputsPtr.addr)
+    check inputsPtr == nil
+
+    release_key(vkPtr.addr)
+    check vkPtr == nil
 
     ctx.addr.release_circom_compat()
     check ctx == nil
-
-    proofBytes.addr.release_buffer()
-    check proofBytes == nil
-
-    publicBytes.addr.release_buffer()
-    check publicBytes == nil
-
-    check res == ERR_OK
