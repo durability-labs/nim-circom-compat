@@ -6,6 +6,7 @@ import std/macros
 const
   currentDir = currentSourcePath().parentDir()
   libDir* = currentDir/"vendor/circom-compat-ffi/target"/"release"
+  # libDir* = currentDir/"vendor/circom-compat-ffi/target"/"debug" # XXX: uncomment for debug build
   libPath* = libDir/"libcircom_compat_ffi.a"
 
 static:

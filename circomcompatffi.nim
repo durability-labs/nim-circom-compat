@@ -31,39 +31,73 @@ const ERR_SERIALIZE_PROOF* = 13
 const ERR_SERIALIZE_INPUTS* = 14
 
 
+type CircomBn254Cfg* {.incompleteStruct.} = object
+
 type CircomCompatCtx* {.incompleteStruct.} = object
 
-type Buffer* = object
-  data*: pointer
+type G1* = object
+  x*: array[32, byte]
+  y*: array[32, byte]
+
+type G2* = object
+  x*: array[2, array[32, byte]]
+  y*: array[2, array[32, byte]]
+
+type Proof* = object
+  a*: G1
+  b*: G2
+  c*: G1
+
+type Inputs* = object
+  elms*: ptr array[32, byte]
   len*: uint
 
-## # Safety
-#
-proc init_circom_compat*(r1cs_path: pointer,
+type VerifyingKey* = object
+  alpha1*: G1
+  beta2*: G2
+  gamma2*: G2
+  delta2*: G2
+  ic*: ptr G1
+  icLen*: uint
+
+proc init_circom_config_with_checks*(r1cs_path: pointer,
+                                     wasm_path: pointer,
+                                     zkey_path: pointer,
+                                     sanity_check: bool,
+                                     cfg_ptr: ptr ptr CircomBn254Cfg): int32 {.importc: "init_circom_config_with_checks".}
+
+proc init_circom_config*(r1cs_path: pointer,
                          wasm_path: pointer,
                          zkey_path: pointer,
+                         cfg_ptr: ptr ptr CircomBn254Cfg): int32 {.importc: "init_circom_config".}
+
+proc init_circom_compat*(cfg_ptr: ptr CircomBn254Cfg,
                          ctx_ptr: ptr ptr CircomCompatCtx): int32 {.importc: "init_circom_compat".}
 
 proc release_circom_compat*(ctx_ptr: ptr ptr CircomCompatCtx): void {.importc: "release_circom_compat".}
 
-proc release_buffer*(buff_ptr: ptr ptr Buffer): void {.importc: "release_buffer".}
+proc release_cfg*(cfg_ptr: ptr ptr CircomBn254Cfg): void {.importc: "release_cfg".}
 
-## # Safety
-#
-proc prove_circuit*(ctx_ptr: ptr CircomCompatCtx,
-                    compress: bool,
-                    proof_bytes_ptr: ptr ptr Buffer,
-                    inputs_bytes_ptr: ptr ptr Buffer): int32 {.importc: "prove_circuit".}
+proc release_proof*(proof_ptr: ptr ptr Proof): void {.importc: "release_proof".}
 
-## # Safety
-#
-proc verify_circuit*(ctx_ptr: ptr CircomCompatCtx,
-                     compress: bool,
-                     proof_bytes_ptr: ptr Buffer,
-                     inputs_bytes_ptr: ptr Buffer): int32 {.importc: "verify_circuit".}
+proc release_inputs*(inputs_ptr: ptr ptr Inputs): void {.importc: "release_inputs".}
 
-## # Safety
-#
+proc release_key*(key_ptr: ptr ptr VerifyingKey): void {.importc: "release_key".}
+
+proc prove_circuit*(cfg_ptr: ptr CircomBn254Cfg,
+                    ctx_ptr: ptr CircomCompatCtx,
+                    proof_ptr: ptr ptr Proof): int32 {.importc: "prove_circuit".}
+
+proc get_pub_inputs*(ctx_ptr: ptr CircomCompatCtx,
+                     inputs_ptr: ptr ptr Inputs): int32 {.importc: "get_pub_inputs".}
+
+proc get_verifying_key*(cfg_ptr: ptr CircomBn254Cfg,
+                        vk_ptr: ptr ptr VerifyingKey): int32 {.importc: "get_verifying_key".}
+
+proc verify_circuit*(proof: ptr Proof,
+                     inputs: ptr Inputs,
+                     pvk: ptr VerifyingKey): int32 {.importc: "verify_circuit".}
+
 proc push_input_u256_array*(ctx_ptr: ptr CircomCompatCtx,
                             name_ptr: pointer,
                             input_ptr: pointer,
