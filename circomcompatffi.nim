@@ -38,12 +38,12 @@ type Buffer* = object
   len*: uint
 
 type G1* = object
-  x*: array[byte, 32]
-  y*: array[byte, 32]
+  x*: array[32, byte]
+  y*: array[32, byte]
 
 type G2* = object
-  x*: array[array[byte, 32], 2]
-  y*: array[array[byte, 32], 2]
+  x*: array[2, array[byte, 32]]
+  y*: array[2, array[byte, 32]]
 
 type Proof* = object
   a*: G1
@@ -51,7 +51,7 @@ type Proof* = object
   c*: G1
 
 type Inputs* = object
-  elms*: ptr array[byte, 32]
+  elms*: ptr array[32, byte]
   len*: uint
 
 ## # Safety
