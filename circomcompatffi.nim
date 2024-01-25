@@ -42,8 +42,8 @@ type G1* = object
   y*: array[32, byte]
 
 type G2* = object
-  x*: array[2, array[byte, 32]]
-  y*: array[2, array[byte, 32]]
+  x*: array[2, array[32, byte]]
+  y*: array[2, array[32, byte]]
 
 type Proof* = object
   a*: G1
