@@ -10,14 +10,21 @@ const
   libPath* = libDir/"libcircom_compat_ffi.a"
 
 static:
-  let cmd = "cd vendor/circom-compat-ffi && cargo build --release"
-  warning "\nBuilding circom compat ffi: " & cmd
-  let (output, exitCode) = gorgeEx cmd
-  for ln in output.splitLines():
-    warning("cargo> " & ln)
-  if exitCode != 0:
-    raiseAssert("Failed to build circom-compat-ffi")
+  let
+    cmd = "cargo build --release --manifest-path=vendor/circom-compat-ffi/Cargo.toml"
 
-{.passl: "-lcircom_compat_ffi -lm" & " -L" & libDir.}
+  warning "\nBuilding circom compat ffi: "
+  warning cmd
+  let (output, exitCode) = gorgeEx cmd
+  if exitCode != 0:
+    for ln in output.splitLines():
+      warning("rust error> " & ln)
+    raiseAssert("Failed to build circom-compat-ffi")
+  warning "circom compat ffi built successfully\n"
+
+when defined(windows):
+  {.passl: "-lcircom_compat_ffi -lm -lws2_32 -luserenv -lntdll -lbcrypt " & " -L" & libDir.}
+else:
+  {.passl: "-lcircom_compat_ffi -lm" & " -L" & libDir.}
 
 include circomcompatffi
