@@ -74,6 +74,9 @@ proc init_circom_config*(r1cs_path: pointer,
 proc init_circom_compat*(cfg_ptr: ptr CircomBn254Cfg,
                          ctx_ptr: ptr ptr CircomCompatCtx): int32 {.importc: "init_circom_compat".}
 
+proc duplicate_circom_config*(cfg_ptr: ptr CircomBn254Cfg,
+                              ctx_ptr: ptr ptr CircomCompatCtx): int32 {.importc: "duplicate_circom_config".}
+
 proc release_circom_compat*(ctx_ptr: ptr ptr CircomCompatCtx): void {.importc: "release_circom_compat".}
 
 proc release_cfg*(cfg_ptr: ptr ptr CircomBn254Cfg): void {.importc: "release_cfg".}
