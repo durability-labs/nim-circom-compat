@@ -10,6 +10,8 @@ jobs:
       matrix:
         nim:
           - '2.0.14'
+        rust:
+          - '1.79.0'
         os:
           - ubuntu-latest
           - windows-latest
@@ -25,12 +27,12 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           rustup set default-host x86_64-pc-windows-gnu
-          rustup update stable
-          rustup default stable
+          rustup update ${{ matrix.rust }}
+          rustup default ${{ matrix.rust }}
 
       - name: Set rust ${{ matrix.os }}
         if: matrix.os != 'windows-latest'
-        run: rustup update stable && rustup default stable
+        run: rustup update ${{ matrix.rust }} && rustup default ${{ matrix.rust }}
 
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v1
