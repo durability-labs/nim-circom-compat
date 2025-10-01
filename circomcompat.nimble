@@ -4,6 +4,7 @@ version       = "0.1.1"
 author        = "Dmitriy Ryajov"
 description   = "Nim wrapper for rust circom compat (ark-circom)"
 license       = "MIT"
+installDirs   = @["vendor"]
 
 # Dependencies
 
