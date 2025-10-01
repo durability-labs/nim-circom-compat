@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.2"
+version       = "0.1.3"
 author        = "Dmitriy Ryajov"
 description   = "Nim wrapper for rust circom compat (ark-circom)"
 license       = "MIT"
